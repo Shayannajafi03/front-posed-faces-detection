@@ -3,10 +3,6 @@ import matplotlib.pyplot as plt
 import cv2 
 
 
-def Convolution(kernel , image):
-    pass
-
-
 # convolution functoin part
 def conv2d(image , kernel):
 
