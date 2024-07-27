@@ -1,6 +1,7 @@
 import numpy as np
-import matplotlib.pyplot as plt
+import imghdr
 import cv2 
+import os
 
 
 # convolution functoin part
@@ -80,23 +81,48 @@ def conv3d(image , kernel):
         
     return output.astype(np.int16)
 
-class main():
-    def __init__(self):
+
+def is_black_and_white(image):
+    # Define the upper and lower bounds for the HSV values
+    upper_bound = np.array([259, 30, 100])
+    lower_bound = np.array([0, 0, 0])
+    
+    # Convert the image from BGR to HSV format
+    hsv = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
+    
+    # Create a mask using the inRange function to filter out the specified HSV range
+    mask = cv2.inRange(hsv, lower_bound, upper_bound)
+    
+    # Check the mean value of the mask
+    if mask.mean() > 28:
+        return True
+    return False
+
+
+
+def removing_black_and_white_images(path):
+        for file in os.listdir(path):
+              file_path = os.path.join(path, file)
+              if imghdr.what(file_path)is not None: # check if it's a image or not
+                    image = cv2.imread(file_path)
+                    if is_black_and_white(image):
+                          os.remove(file_path)
+                          print(f"Removed {file_path} because it's black and white")
+                          continue
+                    
+
+
+
+def face_detection():
         pass
 
-    def removing_black_and_white_images(self):
+def face_feature_extraction():
         pass
 
-    def face_detection(self):
-        pass
+def is_frontpose():
 
-    def face_feature_extraction(self):
         pass
-
-    def is_frontpose(self):
-        pass
-
-    def frontposed_faces_detector(self):
+def frontposed_faces_detector():
         pass
         
 
