@@ -3,6 +3,10 @@ import matplotlib.pyplot as plt
 import cv2 
 
 
+def Convolution(kernel , image):
+    pass
+
+
 
 class main():
     def __init__(self) -> None:
@@ -20,7 +24,8 @@ class main():
     def is_frontpose(self):
         pass
 
-    def 
+    def frontposed_faces_detector(self):
+        pass
         
 
 
