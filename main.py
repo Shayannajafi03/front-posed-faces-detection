@@ -72,12 +72,13 @@ def conv3d(image , kernel):
         # Perform convolution for each channel
         convolved_channel = conv2d(image[:, :, c], kernel)
         output[:, :, c] = convolved_channel
-        
-    min_val = output.min()
-    max_val = output.max()
-    out_put = (output-min_val)/(max_val - min_val) *255
     
-    return out_put.astype(np.int16)
+    if output.max() > 255: 
+        min_val = output.min()
+        max_val = output.max()
+        output = (output-min_val)/(max_val - min_val) *255
+        
+    return output.astype(np.int16)
 
 class main():
     def __init__(self):
