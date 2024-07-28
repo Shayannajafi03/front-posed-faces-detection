@@ -1,4 +1,5 @@
 from retinaface import RetinaFace
+import matplotlib.pyplot as plt
 import numpy as np
 import imghdr
 import cv2 
@@ -128,10 +129,11 @@ def show_faces(image_path):
     image = cv2.cvtColor(image , cv2.COLOR_BGR2RGB)
     faces = face_detection(image_path)
     for face in faces:
+        face = faces[face]
         x, y, w, h = face['facial_area']
-        cv2.rectangle(image, (x, y), (x + w, y + h))
-    cv2.imshow('image', image)
-
+        cv2.rectangle(image, (x, y), (w,h) , (0,255,0) , 2)
+    plt.axis("off")
+    plt.imshow(image)
 
 
 def face_feature_extraction():
