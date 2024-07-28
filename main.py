@@ -1,3 +1,4 @@
+from retinaface import RetinaFace
 import numpy as np
 import imghdr
 import cv2 
@@ -82,6 +83,7 @@ def conv3d(image , kernel):
     return output.astype(np.int16)
 
 
+
 def is_black_and_white(image):
     # Define the upper and lower bounds for the HSV values
     upper_bound = np.array([259, 30, 100])
@@ -101,6 +103,9 @@ def is_black_and_white(image):
 
 
 def removing_black_and_white_images(path):
+        """
+        Remove all black and white images from the specified directory.
+        """
         for file in os.listdir(path):
               file_path = os.path.join(path, file)
               if imghdr.what(file_path)is not None: # check if it's a image or not
@@ -113,15 +118,28 @@ def removing_black_and_white_images(path):
 
 
 
-def face_detection():
-        pass
+def face_detection(image_path):
+        faces = RetinaFace.detect_faces(image_path)
+        return faces
+
+
+def show_faces(image_path):
+    image = cv2.imread(image_path)
+    image = cv2.cvtColor(image , cv2.COLOR_BGR2RGB)
+    faces = face_detection(image_path)
+    for face in faces:
+        x, y, w, h = face['facial_area']
+        cv2.rectangle(image, (x, y), (x + w, y + h))
+    cv2.imshow('image', image)
+
+
 
 def face_feature_extraction():
         pass
 
 def is_frontpose():
-
         pass
+
 def frontposed_faces_detector():
         pass
         
