@@ -106,7 +106,7 @@ def is_black_and_white(image):
 
 
 
-def removing_black_and_white_images(path):
+def remove_black_and_white_images(path):
         """
         Remove all black and white images from the specified directory.
         """
@@ -215,7 +215,7 @@ def frontposed_faces_detector(folder_path):
                 if is_frontpose(useful_features["Right_eye"], useful_features["Left_eye"], useful_features["Nose"]):
                     x1 , y1 , x2 , y2 = useful_features["location"] 
                     croped_image = image[y1:y2 , x1:x2]
-                    count =+ 1
+                    count += 1
                     save_croped_image(file , croped_image)
                     
                         
@@ -223,18 +223,11 @@ def frontposed_faces_detector(folder_path):
     print(f"find {count} front pose face(s)")
 
 
-                       
 
+if __name__ == "__main__":
+    folder_path = "./faces"
+    remove_black_and_white_images(folder_path)
+    frontposed_faces_detector(folder_path)
 
-
-
-
-                        
-
-
-
-
-        
-        
 
 
