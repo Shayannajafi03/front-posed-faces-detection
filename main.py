@@ -139,18 +139,20 @@ def show_faces(image_path):
     plt.imshow(image)
 
 
-def face_feature_extraction(faces_feature__dic):
+def face_feature_extraction(face_feature__dic):
     face_features = {}
-    face_features["location"] = faces_feature__dic["facial_area"]
-    face_features["Right_eye"] = faces_feature__dic["landmarks"]["right_eye"]
-    face_features["Left_eye"] = faces_feature__dic["landmarks"]["left_eye"]
-    face_features["Nose"] = faces_feature__dic["landmarks"]["nose"]     
+    face_features["location"] = face_feature__dic["facial_area"]
+    face_features["Right_eye"] = face_feature__dic["landmarks"]["right_eye"]
+    face_features["Left_eye"] = face_feature__dic["landmarks"]["left_eye"]
+    face_features["Nose"] = face_feature__dic["landmarks"]["nose"]
+    face_features["mouth_right"] = face_feature__dic["landmarks"]["mouth_right"]     
+    face_features["mouth_left"] = face_feature__dic["landmarks"]["mouth_left"]
     
     return face_features
 
 
 
-def is_frontpose(Right_eye , Left_eye , Nose):
+def is_frontpose(useful_features):
         
     """
     Determines if a face is in a frontal pose based on the positions of key landmarks.
@@ -158,26 +160,30 @@ def is_frontpose(Right_eye , Left_eye , Nose):
     Steps:
     1. Calculate the Euclidean distance between the left and right eyes (d_eyes).
     2. Calculate the midpoint between the eyes (mid_eyes_x).
-    3. Define a threshold for frontal face alignment as a small fraction (e.g., 15%) of the inter-eye distance (d_eyes).
-    4. Calculate the horizontal distance between the nose and the midpoint of the eyes (d_nose_mid_eyes).
+    3. Define a threshold for frontal face alignment as a small fraction (e.g., 35%) of the inter-eye distance (d_eyes).
+    4. Calculate the horizontal distances between the nose , mouse and the midpoint of the eyes (d_nose_mid_eyes , d_nose_mid_eyes).
     6. Compare the distance d_nose_mid_eyes  with the defined threshold.
     7. If its distance is less than the threshold, the face is considered to be in a frontal pose.
     """
-    Right_eye = np.array(Right_eye)
-    Left_eye = np.array(Left_eye)
-    Nose = np.array(Nose)
-    
-    d_eyes = norm(Right_eye-Left_eye)
+    Right_eye = np.array(useful_features["Right_eye"])
+    Left_eye = np.array(useful_features["Left_eye"])
+    Nose = np.array(useful_features["Nose"])
+    mouth_right = np.array(useful_features["mouth_right"])
+    mouth_left = np.array(useful_features["mouth_left"])
 
+
+    d_eyes = norm(Right_eye-Left_eye)
     mid_eyes_x = (Right_eye[0] + Left_eye[0]) / 2
-    
-    # Define threshold as 15% of the inter-eye distance
-    threshold = 0.15 * d_eyes
+    mid_mouse_x = (mouth_right[0] + mouth_left[0]) / 2
+
+    # Define threshold as 35% of the inter-eye distance
+    threshold = 0.35 * d_eyes
 
     # Calculate horizontal distance from the nose to the midpoint of the eyes
     d_nose_mid_eyes = abs(Nose[0] - mid_eyes_x)
+    d_mouse_mid_eyes = abs(mid_mouse_x - mid_eyes_x)
 
-    if d_nose_mid_eyes <= threshold:
+    if (d_nose_mid_eyes <= threshold) and (d_mouse_mid_eyes <= threshold):
          return True
     
     return False
@@ -212,7 +218,7 @@ def frontposed_faces_detector(folder_path):
                 face_info = faces_features[face_feature] # collect features of each face
                 useful_features = face_feature_extraction(face_info) # collect useful features of each face
 
-                if is_frontpose(useful_features["Right_eye"], useful_features["Left_eye"], useful_features["Nose"]):
+                if is_frontpose(useful_features):
                     x1 , y1 , x2 , y2 = useful_features["location"] 
                     croped_image = image[y1:y2 , x1:x2]
                     count += 1
