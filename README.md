@@ -31,7 +31,7 @@ pip install retinaface matplotlib numpy tqdm opencv-python
   convolved_image = conv2d(image, kernel)
   ```
 
-- **2D Convolution (Color)**
+- **3D Convolution (Color)**
 
   ```python
   from main import conv3d
