@@ -133,8 +133,8 @@ def show_faces(image_path):
     faces = face_detection(image_path)
     for face in faces:
         face = faces[face]
-        x, y, w, h = face['facial_area']
-        cv2.rectangle(image, (x, y), (w,h) , (0,255,0) , 2)
+        x1, y1, x2, y2= face['facial_area']
+        cv2.rectangle(image, (x1, y1), (x2,y2) , (0,255,0) , 2)
     plt.axis("off")
     plt.imshow(image)
 
