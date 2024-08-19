@@ -9,6 +9,30 @@ import cv2
 import os
 
 
+identity_kernel = np.array([
+    [0 , 0 , 0],
+    [0 , 1 , 0],
+    [0 , 0 , 0]
+])
+
+leftsobel_kernel = np.array([
+    [-1, 0, 1],
+    [-2, 0, 2],
+    [-1, 0, 1]
+])
+
+gaussian_blur_kernel = (1/16)*np.array([
+    [1, 2, 1],
+    [2, 4, 2],
+    [1, 2, 1]
+])
+
+random_kernel = np.array([
+    [0.7 , -1.2 , 0.3],
+    [1.1 , -0.5 , 0.8],
+    [-0.9 , 0.4 , -0.6]
+])
+
 # convolution functoin part
 def conv2d(image , kernel):
 
@@ -231,6 +255,26 @@ def frontposed_faces_detector(folder_path):
 
 
 if __name__ == "__main__":
+    #to show how convolution function works
+    test_img = cv2.cvtColor(cv2.imread("./faces/3.webp") , cv2.COLOR_BGR2RGB)
+    kernel_list = [
+        identity_kernel,
+        leftsobel_kernel,
+        gaussian_blur_kernel,
+        random_kernel
+    ]
+
+    kernel_names = ["identity_kernel" , "leftsobel_kernel" , "gaussian_blur_kernel" , "random_kernel"]
+    plt.figure(figsize=(10 , 5))
+    for idx in range(4):
+        ax = plt.subplot(2 , 2 , idx+1)
+        img = conv3d(test_img , kernel_list[idx])
+        ax.set_title(kernel_names[idx])
+        ax.imshow(img)
+        ax.axis("off")
+
+    plt.show()
+        
     folder_path = "./faces"
     remove_black_and_white_images(folder_path)
     frontposed_faces_detector(folder_path)
