@@ -5,7 +5,7 @@ This project focuses on face detection, removal of black and white images, and d
 ## Features
 
 1. **2D Convolution on Grayscale Images**
-2. **2D Convolution on Color Images**
+2. **3D Convolution on Color Images**
 3. **Black and White Image Detection and Removal**
 4. **Face Detection using RetinaFace**
 5. **Face Feature Extraction**
@@ -31,7 +31,7 @@ pip install retinaface matplotlib numpy tqdm opencv-python
   convolved_image = conv2d(image, kernel)
   ```
 
-- **2D Convolution (Color)**
+- **3D Convolution (Color)**
 
   ```python
   from main import conv3d
